@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>task2.2.5.1: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">go-kata/course2/2.oop/5.oop_mock/task2.2.5.1/client.go (0.0%)</option>
+				
+				<option value="file1">go-kata/course2/2.oop/5.oop_mock/task2.2.5.1/indicator.go (100.0%)</option>
+				
+				<option value="file2">go-kata/course2/2.oop/5.oop_mock/task2.2.5.1/main.go (0.0%)</option>
+				
+				<option value="file3">go-kata/course2/2.oop/5.oop_mock/task2.2.5.1/mock_client.go (20.8%)</option>
+				
+				<option value="file4">go-kata/course2/2.oop/5.oop_mock/task2.2.5.1/order_book.go (0.0%)</option>
+				
+				<option value="file5">go-kata/course2/2.oop/5.oop_mock/task2.2.5.1/ticker.go (0.0%)</option>
+				
+				<option value="file6">go-kata/course2/2.oop/5.oop_mock/task2.2.5.1/trades.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+    "net/http"
+    "time"
+)
+
+type Exmo struct {
+    client *http.Client
+    url    string
+}
+type Currencies map[string]struct{}
+
+func (e *Exmo) GetCurrencies() (Currencies, error) <span class="cov0" title="0">{
+    // Заглушка
+    return Currencies{}, nil
+}</span>
+
+
+func NewExmo(opts ...func(exmo *Exmo)) Exchanger <span class="cov0" title="0">{
+    exmo := &amp;Exmo{
+        client: &amp;http.Client{},
+        url:    "https://api.exmo.com/v1",
+    }
+    for _, opt := range opts </span><span class="cov0" title="0">{
+        opt(exmo)
+    }</span>
+    <span class="cov0" title="0">return exmo</span>
+}
+func (e *Exmo) GetOrderBook(limit int, pairs ...string) (OrderBook, error) <span class="cov0" title="0">{
+    return OrderBook{}, nil
+}</span>
+func (e *Exmo) GetTicker() (Ticker, error) <span class="cov0" title="0">{
+    return Ticker{}, nil
+}</span>
+func (e *Exmo) GetTrades(pairs ...string) (Trades, error) <span class="cov0" title="0">{
+    return Trades{}, nil
+}</span>
+
+
+
+
+func (e *Exmo) GetClosePrice(pair string, resolution int, start, end time.Time) ([]float64, error) <span class="cov0" title="0">{
+    return []float64{1, 2, 3, 4, 5}, nil
+}</span>
+
+func (e *Exmo) GetCandlesHistory(pair string, period int, start, end time.Time) (CandlesHistory, error) <span class="cov0" title="0">{
+    // Заглушка, чтобы удовлетворить интерфейс
+    return CandlesHistory{}, nil
+}</span>
+
+type CandlesHistory struct{}
+
+type Exchanger interface {
+    GetTicker() (Ticker, error)
+    GetTrades(pairs ...string) (Trades, error)
+    GetOrderBook(limit int, pairs ...string) (OrderBook, error)
+    GetCurrencies() (Currencies, error)
+    GetCandlesHistory(pair string, period int, start, end time.Time) (CandlesHistory, error)
+    GetClosePrice(pair string, resolution int, start, end time.Time) ([]float64, error)
+}
+
+// Остальные типы и определения вынеси в отдельные файлы, как я показывал ранее
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package main
+
+import (
+        "time"
+
+        "github.com/cinar/indicator"
+)
+
+type Indicatorer interface {
+        SMA(pair string, resolution, period int, from, to time.Time) ([]float64, error)
+        EMA(pair string, resolution, period int, from, to time.Time) ([]float64, error)
+}
+
+type Indicator struct {
+        exchange     Exchanger
+        calculateSMA func(data []float64, period int) []float64
+        calculateEMA func(data []float64, period int) []float64
+}
+
+type IndicatorOption func(*Indicator)
+
+func WithCalculateSMA(f func(data []float64, period int) []float64) IndicatorOption <span class="cov8" title="1">{
+        return func(i *Indicator) </span><span class="cov8" title="1">{
+                i.calculateSMA = f
+        }</span>
+}
+
+func WithCalculateEMA(f func(data []float64, period int) []float64) IndicatorOption <span class="cov8" title="1">{
+        return func(i *Indicator) </span><span class="cov8" title="1">{
+                i.calculateEMA = f
+        }</span>
+}
+
+func NewIndicator(exchange Exchanger, opts ...IndicatorOption) Indicatorer <span class="cov8" title="1">{
+        ind := &amp;Indicator{
+                exchange: exchange,
+        }
+
+        for _, opt := range opts </span><span class="cov8" title="1">{
+                opt(ind)
+        }</span>
+
+        // Установка значений по умолчанию
+        <span class="cov8" title="1">if ind.calculateSMA == nil </span><span class="cov8" title="1">{
+                ind.calculateSMA = calculateSMA
+        }</span>
+
+        <span class="cov8" title="1">if ind.calculateEMA == nil </span><span class="cov8" title="1">{
+                ind.calculateEMA = calculateEMA
+        }</span>
+
+        <span class="cov8" title="1">return ind</span>
+}
+
+func (i *Indicator) SMA(pair string, resolution, period int, from, to time.Time) ([]float64, error) <span class="cov8" title="1">{
+        data, err := i.exchange.GetClosePrice(pair, resolution, from, to)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return i.calculateSMA(data, period), nil</span>
+}
+
+func (i *Indicator) EMA(pair string, resolution, period int, from, to time.Time) ([]float64, error) <span class="cov8" title="1">{
+        data, err := i.exchange.GetClosePrice(pair, resolution, from, to)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return i.calculateEMA(data, period), nil</span>
+}
+
+func calculateSMA(data []float64, period int) []float64 <span class="cov8" title="1">{
+    if len(data) &lt; period || period &lt;= 0 </span><span class="cov8" title="1">{
+        return []float64{}
+    }</span>
+    <span class="cov8" title="1">return indicator.Sma(period, data)[period-1:]</span>
+}
+
+func calculateEMA(data []float64, period int) []float64 <span class="cov8" title="1">{
+    if len(data) &lt; period || period &lt;= 0 </span><span class="cov8" title="1">{
+        return []float64{}
+    }</span>
+    // EMA возвращает результат той же длины, что и входные данные
+    <span class="cov8" title="1">return indicator.Ema(period, data)</span>
+}</pre>
+		
+		<pre class="file" id="file2" style="display: none">package main
+
+import (
+        "fmt"
+        "time"
+)
+
+func main() <span class="cov0" title="0">{
+        // Инициализация клиента Exmo
+        exchange := NewExmo()
+
+        // Инициализация сервиса индикаторов с функциями расчёта
+        indicator := NewIndicator(exchange,
+                WithCalculateSMA(calculateSMA),
+                WithCalculateEMA(calculateEMA),
+        )
+
+        // Параметры
+        pair := "BTC_USD"
+        resolution := 30
+        period := 5
+        from := time.Now().AddDate(0, 0, -2)
+        to := time.Now()
+
+        // Расчет SMA
+        sma, err := indicator.SMA(pair, resolution, period, from, to)
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println("Ошибка при расчете SMA:", err)
+                return
+        }</span>
+        <span class="cov0" title="0">fmt.Println("SMA:", sma)
+
+        // Расчет EMA
+        ema, err := indicator.EMA(pair, resolution, period, from, to)
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println("Ошибка при расчете EMA:", err)
+                return
+        }</span>
+        <span class="cov0" title="0">fmt.Println("EMA:", ema)</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: client.go
+
+// Package main is a generated GoMock package.
+package main
+
+import (
+        reflect "reflect"
+        time "time"
+
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockExchanger is a mock of Exchanger interface.
+type MockExchanger struct {
+        ctrl     *gomock.Controller
+        recorder *MockExchangerMockRecorder
+}
+
+// MockExchangerMockRecorder is the mock recorder for MockExchanger.
+type MockExchangerMockRecorder struct {
+        mock *MockExchanger
+}
+
+// NewMockExchanger creates a new mock instance.
+func NewMockExchanger(ctrl *gomock.Controller) *MockExchanger <span class="cov8" title="1">{
+        mock := &amp;MockExchanger{ctrl: ctrl}
+        mock.recorder = &amp;MockExchangerMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockExchanger) EXPECT() *MockExchangerMockRecorder <span class="cov8" title="1">{
+        return m.recorder
+}</span>
+
+// GetCandlesHistory mocks base method.
+func (m *MockExchanger) GetCandlesHistory(pair string, period int, start, end time.Time) (CandlesHistory, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetCandlesHistory", pair, period, start, end)
+        ret0, _ := ret[0].(CandlesHistory)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetCandlesHistory indicates an expected call of GetCandlesHistory.
+func (mr *MockExchangerMockRecorder) GetCandlesHistory(pair, period, start, end interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCandlesHistory", reflect.TypeOf((*MockExchanger)(nil).GetCandlesHistory), pair, period, start, end)
+}</span>
+
+// GetClosePrice mocks base method.
+func (m *MockExchanger) GetClosePrice(pair string, resolution int, start, end time.Time) ([]float64, error) <span class="cov8" title="1">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetClosePrice", pair, resolution, start, end)
+        ret0, _ := ret[0].([]float64)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetClosePrice indicates an expected call of GetClosePrice.
+func (mr *MockExchangerMockRecorder) GetClosePrice(pair, resolution, start, end interface{}) *gomock.Call <span class="cov8" title="1">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetClosePrice", reflect.TypeOf((*MockExchanger)(nil).GetClosePrice), pair, resolution, start, end)
+}</span>
+
+// GetCurrencies mocks base method.
+func (m *MockExchanger) GetCurrencies() (Currencies, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetCurrencies")
+        ret0, _ := ret[0].(Currencies)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetCurrencies indicates an expected call of GetCurrencies.
+func (mr *MockExchangerMockRecorder) GetCurrencies() *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCurrencies", reflect.TypeOf((*MockExchanger)(nil).GetCurrencies))
+}</span>
+
+// GetOrderBook mocks base method.
+func (m *MockExchanger) GetOrderBook(limit int, pairs ...string) (OrderBook, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        varargs := []interface{}{limit}
+        for _, a := range pairs </span><span class="cov0" title="0">{
+                varargs = append(varargs, a)
+        }</span>
+        <span class="cov0" title="0">ret := m.ctrl.Call(m, "GetOrderBook", varargs...)
+        ret0, _ := ret[0].(OrderBook)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1</span>
+}
+
+// GetOrderBook indicates an expected call of GetOrderBook.
+func (mr *MockExchangerMockRecorder) GetOrderBook(limit interface{}, pairs ...interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        varargs := append([]interface{}{limit}, pairs...)
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrderBook", reflect.TypeOf((*MockExchanger)(nil).GetOrderBook), varargs...)
+}</span>
+
+// GetTicker mocks base method.
+func (m *MockExchanger) GetTicker() (Ticker, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetTicker")
+        ret0, _ := ret[0].(Ticker)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetTicker indicates an expected call of GetTicker.
+func (mr *MockExchangerMockRecorder) GetTicker() *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTicker", reflect.TypeOf((*MockExchanger)(nil).GetTicker))
+}</span>
+
+// GetTrades mocks base method.
+func (m *MockExchanger) GetTrades(pairs ...string) (Trades, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        varargs := []interface{}{}
+        for _, a := range pairs </span><span class="cov0" title="0">{
+                varargs = append(varargs, a)
+        }</span>
+        <span class="cov0" title="0">ret := m.ctrl.Call(m, "GetTrades", varargs...)
+        ret0, _ := ret[0].(Trades)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1</span>
+}
+
+// GetTrades indicates an expected call of GetTrades.
+func (mr *MockExchangerMockRecorder) GetTrades(pairs ...interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTrades", reflect.TypeOf((*MockExchanger)(nil).GetTrades), pairs...)
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package main
+
+import "encoding/json"
+
+func UnmarshalOrderBook(data []byte) (OrderBook, error) <span class="cov0" title="0">{
+        var r OrderBook
+        err := json.Unmarshal(data, &amp;r)
+        return r, err
+}</span>
+
+func (r *OrderBook) Marshal() ([]byte, error) <span class="cov0" title="0">{
+        return json.Marshal(r)
+}</span>
+
+type OrderBook map[string]OrderBookPair
+
+type OrderBookPair struct {
+        AskQuantity string     `json:"ask_quantity"`
+        AskAmount   string     `json:"ask_amount"`
+        AskTop      string     `json:"ask_top"`
+        BidQuantity string     `json:"bid_quantity"`
+        BidAmount   string     `json:"bid_amount"`
+        BidTop      string     `json:"bid_top"`
+        Ask         [][]string `json:"ask"`
+        Bid         [][]string `json:"bid"`
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package main
+
+import "encoding/json"
+
+type Ticker map[string]TickerValue
+
+func UnmarshalTicker(data []byte) (Ticker, error) <span class="cov0" title="0">{
+        var r Ticker
+        err := json.Unmarshal(data, &amp;r)
+        return r, err
+}</span>
+
+func (r *Ticker) Marshal() ([]byte, error) <span class="cov0" title="0">{
+        return json.Marshal(r)
+}</span>
+
+type TickerValue struct {
+        BuyPrice  string `json:"buy_price"`
+        SellPrice string `json:"sell_price"`
+        LastTrade string `json:"last_trade"`
+        High      string `json:"high"`
+        Low       string `json:"low"`
+        Avg       string `json:"avg"`
+        Vol       string `json:"vol"`
+        VolCurr   string `json:"vol_curr"`
+        Updated   int64  `json:"updated"`
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package main
+
+import "encoding/json"
+
+func UnmarshalTrades(data []byte) (Trades, error) <span class="cov0" title="0">{
+        var r Trades
+        err := json.Unmarshal(data, &amp;r)
+        return r, err
+}</span>
+
+func (r *Trades) Marshal() ([]byte, error) <span class="cov0" title="0">{
+        return json.Marshal(r)
+}</span>
+
+type Trades map[string][]Pair
+
+type Pair struct {
+        TradeID  int64  `json:"trade_id"`
+        Date     int64  `json:"date"`
+        Type     Type   `json:"type"`
+        Quantity string `json:"quantity"`
+        Price    string `json:"price"`
+        Amount   string `json:"amount"`
+}
+
+type Type string
+
+const (
+        Buy  Type = "buy"
+        Sell Type = "sell"
+)
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
